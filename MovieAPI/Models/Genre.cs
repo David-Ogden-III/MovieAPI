@@ -1,4 +1,6 @@
-﻿namespace MovieAPI.Models;
+﻿using System.Text.Json.Serialization;
+
+namespace MovieAPI.Models;
 
 public partial class Genre
 {
@@ -6,5 +8,6 @@ public partial class Genre
 
     public string? Genretype { get; set; }
 
+    [JsonIgnore]
     public virtual ICollection<Movie> Movies { get; set; } = new List<Movie>();
 }
