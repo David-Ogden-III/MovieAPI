@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MovieAPI.Models;
-using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace MovieAPI.Controllers;
 
@@ -8,12 +8,31 @@ namespace MovieAPI.Controllers;
 [ApiController]
 public class RatingController : ControllerBase
 {
-    private readonly ILogger<RatingController> _logger;
     private readonly MovieApiContext _context;
 
-    public RatingController(ILogger<RatingController> logger, MovieApiContext context)
+    public RatingController(MovieApiContext context)
     {
-        _logger = logger;
         _context = context;
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Rating>>> Get()
+    {
+        List<Rating> rating = await _context.Ratings.ToListAsync();
+
+        return Ok(rating);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<IEnumerable<Rating>>> GetById(int id)
+    {
+        Rating? rating = await _context.Ratings.FindAsync(id);
+
+        if (rating == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(rating);
     }
 }
