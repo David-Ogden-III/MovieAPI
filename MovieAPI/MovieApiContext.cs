@@ -1,4 +1,4 @@
-﻿using Models;
+﻿using MovieAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace MovieAPI;
