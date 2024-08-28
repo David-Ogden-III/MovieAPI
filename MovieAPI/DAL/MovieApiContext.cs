@@ -1,7 +1,7 @@
 ﻿using MovieAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace MovieAPI;
+namespace MovieAPI.DAL;
 
 public partial class MovieApiContext : DbContext
 {

@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using MovieAPI;
+using MovieAPI.DAL;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
