@@ -39,4 +39,27 @@ public class MovieController : ControllerBase
 
         return Ok(movie);
     }
+
+    //[HttpGet("FilterByGenre/{genreId}")]
+    //public async Task<ActionResult<Movie>> GetByGenre(int genreId)
+    //{
+    //    List<Movie> movies = await _context.Movies
+    //        .Include(m => m.Genres)
+    //        .Include(m => m.Rating)
+    //        .ToListAsync();
+
+    //    return Ok(movies);
+    //}
+
+    [HttpGet("FilterByRating/{ratingId}")]
+    public async Task<ActionResult<Movie>> GetByRating(int ratingId)
+    {
+        List<Movie> movies = await _context.Movies
+            .Where(movie => movie.Ratingid == ratingId)
+            .Include(movie => movie.Genres)
+            .Include(movie => movie.Rating)
+            .ToListAsync();
+
+        return Ok(movies);
+    }
 }
