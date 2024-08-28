@@ -16,12 +16,27 @@ public class MovieController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<Movie>> Get()
+    public async Task<ActionResult<Movie>> Get([FromQuery] int ratingId)
     {
-        List<Movie> movies = await _context.Movies
+        List<Movie> movies = null!;
+
+        if (ratingId > 0)
+        {
+            movies = await _context.Movies
+            .Where(m => m.Ratingid == ratingId)
             .Include(m => m.Rating)
             .Include(m => m.Genres)
+            .AsSplitQuery()
             .ToListAsync();
+        }
+        else
+        {
+            movies = await _context.Movies
+            .Include(m => m.Rating)
+            .Include(m => m.Genres)
+            .AsSplitQuery()
+            .ToListAsync();
+        }
 
         return Ok(movies);
     }
@@ -35,31 +50,8 @@ public class MovieController : ControllerBase
             .FirstOrDefaultAsync(movie => movie.Id == id);
 
         if (movie == null) return NotFound();
-        
+
 
         return Ok(movie);
-    }
-
-    //[HttpGet("FilterByGenre/{genreId}")]
-    //public async Task<ActionResult<Movie>> GetByGenre(int genreId)
-    //{
-    //    List<Movie> movies = await _context.Movies
-    //        .Include(m => m.Genres)
-    //        .Include(m => m.Rating)
-    //        .ToListAsync();
-
-    //    return Ok(movies);
-    //}
-
-    [HttpGet("FilterByRating/{ratingId}")]
-    public async Task<ActionResult<Movie>> GetByRating(int ratingId)
-    {
-        List<Movie> movies = await _context.Movies
-            .Where(movie => movie.Ratingid == ratingId)
-            .Include(movie => movie.Genres)
-            .Include(movie => movie.Rating)
-            .ToListAsync();
-
-        return Ok(movies);
     }
 }
