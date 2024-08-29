@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MovieAPI.Models;
-using Microsoft.EntityFrameworkCore;
 using MovieAPI.DAL;
 
 namespace MovieAPI.Controllers;
@@ -10,24 +9,27 @@ namespace MovieAPI.Controllers;
 public class RatingController : ControllerBase
 {
     private readonly MovieApiContext _context;
+    private readonly UnitOfWork unitOfWork;
 
     public RatingController(MovieApiContext context)
     {
         _context = context;
+        unitOfWork = new(_context);
     }
+
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Rating>>> Get()
     {
-        List<Rating> rating = await _context.Ratings.ToListAsync();
+        var ratings = await unitOfWork.RatingRepository.Get();
 
-        return Ok(rating);
+        return Ok(ratings);
     }
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<IEnumerable<Rating>>> GetById(int id)
+    [HttpGet("{ratingId}")]
+    public async Task<ActionResult<IEnumerable<Rating>>> GetById(int ratingId)
     {
-        Rating? rating = await _context.Ratings.FindAsync(id);
+        Rating? rating = await unitOfWork.RatingRepository.GetById(filter: r => r.Id == ratingId);
 
         if (rating == null)
         {

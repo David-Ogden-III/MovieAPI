@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MovieAPI.Models;
-using Microsoft.EntityFrameworkCore;
 using MovieAPI.DAL;
 
 namespace MovieAPI.Controllers;
@@ -10,25 +9,26 @@ namespace MovieAPI.Controllers;
 public class GenreController : ControllerBase
 {
     private readonly MovieApiContext _context;
+    private readonly UnitOfWork unitOfWork;
 
     public GenreController(MovieApiContext context)
     {
         _context = context;
+        unitOfWork = new(_context);
     }
 
     [HttpGet]
     public async Task<ActionResult<Genre>> Get()
     {
-        List<Genre> movies = await _context.Genres
-            .ToListAsync();
+        var genres = await unitOfWork.GenreRepository.Get();
 
-        return Ok(movies);
+        return Ok(genres);
     }
 
     [HttpGet("{genreId}")]
     public async Task<ActionResult<Genre>> GetById(int genreId)
     {
-        Genre? selectedGenre = await _context.Genres.FindAsync(genreId);
+        Genre? selectedGenre = await unitOfWork.GenreRepository.GetById(filter: g => g.Id == genreId);
 
         if (selectedGenre == null) return NotFound();
 

@@ -10,45 +10,44 @@ namespace MovieAPI.Controllers;
 public class MovieController : ControllerBase
 {
     private readonly MovieApiContext _context;
+    private readonly UnitOfWork unitOfWork;
+    private readonly Dictionary<string, string> TableNames = new()
+    {
+        {"Ratings", nameof(Movie.Rating)},
+        {"Genres", nameof(Movie.Genres)},
+    };
 
     public MovieController(MovieApiContext context)
     {
         _context = context;
+        unitOfWork = new(_context);
     }
 
     [HttpGet]
-    public async Task<ActionResult<Movie>> Get([FromQuery] int ratingId)
+    public async Task<ActionResult<Movie>> Get(int ratingId)
     {
-        List<Movie> movies = null!;
+        string tablesToInclude = $"{TableNames["Ratings"]},{TableNames["Genres"]}";
+
+        ICollection<Movie> movies;
 
         if (ratingId > 0)
         {
-            movies = await _context.Movies
-            .Where(m => m.Ratingid == ratingId)
-            .Include(m => m.Rating)
-            .Include(m => m.Genres)
-            .AsSplitQuery()
-            .ToListAsync();
+            movies = await unitOfWork.MovieRepository.Get(includeProperties: tablesToInclude, filter: m => m.Ratingid == ratingId);
         }
         else
         {
-            movies = await _context.Movies
-            .Include(m => m.Rating)
-            .Include(m => m.Genres)
-            .AsSplitQuery()
-            .ToListAsync();
+            movies = await unitOfWork.MovieRepository.Get(includeProperties: tablesToInclude);
         }
 
         return Ok(movies);
     }
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<Movie>> GetById(int id)
+    [HttpGet("{movieId}")]
+    public async Task<ActionResult<Movie>> GetById(int movieId)
     {
-        Movie? movie = await _context.Movies
-            .Include(m => m.Rating)
-            .Include(m => m.Genres)
-            .FirstOrDefaultAsync(movie => movie.Id == id);
+        string tablesToInclude = $"{TableNames["Ratings"]},{TableNames["Genres"]}";
+
+        Movie? movie = await unitOfWork.MovieRepository.GetById(filter: m => m.Id == movieId, includeProperties: tablesToInclude);
 
         if (movie == null) return NotFound();
 
