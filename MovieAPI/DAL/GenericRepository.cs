@@ -77,4 +77,10 @@ public class GenericRepository<TEntity> where TEntity : class
         _dbSet.Attach(entity);
         _context.Entry(entity).State = EntityState.Modified;
     }
+
+    public virtual bool Exists(Expression<Func<TEntity,bool>> predicate)
+    {
+        bool entityExists = _dbSet.Any(predicate);
+        return entityExists;
+    }
 }
