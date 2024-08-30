@@ -54,4 +54,27 @@ public class MovieController : ControllerBase
 
         return Ok(movie);
     }
+
+    [HttpDelete("{movieId}")]
+    public async Task<IActionResult> Delete(int movieId)
+    {
+        Movie? movieToDelete = await unitOfWork.MovieRepository.GetById(filter: m => m.Id == movieId);
+
+        if (movieToDelete == null)
+        {
+            return NotFound();
+        }
+
+        try
+        {
+            unitOfWork.MovieRepository.Delete(movieToDelete);
+            await unitOfWork.Save();
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            return BadRequest("Movie not deleted. Try again.");
+        }
+    }
 }
