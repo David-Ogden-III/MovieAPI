@@ -45,7 +45,7 @@ public class RatingController : ControllerBase
     {
         try
         {
-            await unitOfWork.RatingRepository.Insert(ratingToAdd);
+            unitOfWork.RatingRepository.Insert(ratingToAdd);
             await unitOfWork.Save();
 
             return CreatedAtAction(nameof(Get), new { ratingToAdd.Id }, ratingToAdd);
@@ -81,7 +81,7 @@ public class RatingController : ControllerBase
     }
 
     [HttpPut("{ratingId}")]
-    public async Task<ActionResult> Edit(Rating newRating, int ratingId)
+    public async Task<ActionResult<Rating>> Edit(Rating newRating, int ratingId)
     {
         if (ratingId != newRating.Id) return BadRequest();
 
@@ -89,8 +89,8 @@ public class RatingController : ControllerBase
 
         if (originalRating == null) return NotFound();
 
-        originalRating.Shortratingtype = newRating.Shortratingtype;
-        originalRating.Ratingtype = newRating.Ratingtype;
+        originalRating.ShortRatingType = newRating.ShortRatingType;
+        originalRating.RatingType = newRating.RatingType;
 
         try
         {
@@ -100,6 +100,6 @@ public class RatingController : ControllerBase
         {
             return NotFound();
         }
-        return NoContent();
+        return Ok(originalRating);
     }
 }

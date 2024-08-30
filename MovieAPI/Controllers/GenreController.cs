@@ -41,7 +41,7 @@ public class GenreController : ControllerBase
     {
         try
         {
-            await unitOfWork.GenreRepository.Insert(genreToAdd);
+            unitOfWork.GenreRepository.Insert(genreToAdd);
             await unitOfWork.Save();
 
             return CreatedAtAction(nameof(Get), new { genreToAdd.Id }, genreToAdd);
@@ -77,7 +77,7 @@ public class GenreController : ControllerBase
     }
 
     [HttpPut("{genreId}")]
-    public async Task<ActionResult> Edit(Genre newGenre, int genreId)
+    public async Task<ActionResult<Genre>> Edit(Genre newGenre, int genreId)
     {
         if (genreId != newGenre.Id) return BadRequest();
 
@@ -85,7 +85,7 @@ public class GenreController : ControllerBase
 
         if (originalGenre == null) return NotFound();
 
-        originalGenre.Genretype = newGenre.Genretype;
+        originalGenre.GenreType = newGenre.GenreType;
 
         try
         {
@@ -95,6 +95,6 @@ public class GenreController : ControllerBase
         {
             return NotFound();
         }
-        return NoContent();
+        return Ok(originalGenre);
     }
 }
