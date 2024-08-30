@@ -62,9 +62,10 @@ public class GenericRepository<TEntity> where TEntity : class
         return result;
     }
 
-    public virtual async Task Insert(TEntity entity)
+    public virtual void Insert(TEntity entity)
     {
-        await _dbSet.AddAsync(entity);
+        _dbSet.Attach(entity);
+        _context.Entry(entity).State = EntityState.Added;
     }
 
     public virtual void Delete(TEntity entity)
