@@ -8,9 +8,9 @@ public partial class Movie
 
     public string? Description { get; set; }
 
-    public int? Ratingid { get; set; }
+    public int? RatingId { get; set; }
 
-    public DateOnly? Releasedate { get; set; }
+    public DateOnly? ReleaseDate { get; set; }
 
     public virtual Rating? Rating { get; set; }
 

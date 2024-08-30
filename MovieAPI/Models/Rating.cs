@@ -6,9 +6,9 @@ public partial class Rating
 {
     public int Id { get; set; }
 
-    public string? Shortratingtype { get; set; }
+    public string? ShortRatingType { get; set; }
 
-    public string? Ratingtype { get; set; }
+    public string? RatingType { get; set; }
 
     [JsonIgnore]
     public virtual ICollection<Movie> Movies { get; set; } = new List<Movie>();

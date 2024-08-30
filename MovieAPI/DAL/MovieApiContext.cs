@@ -32,7 +32,7 @@ public partial class MovieApiContext : DbContext
             entity.ToTable("genres");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Genretype)
+            entity.Property(e => e.GenreType)
                 .HasMaxLength(30)
                 .HasColumnName("genretype");
         });
@@ -45,12 +45,12 @@ public partial class MovieApiContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Description).HasColumnName("description");
-            entity.Property(e => e.Ratingid).HasColumnName("ratingid");
-            entity.Property(e => e.Releasedate).HasColumnName("releasedate");
+            entity.Property(e => e.RatingId).HasColumnName("ratingid");
+            entity.Property(e => e.ReleaseDate).HasColumnName("releasedate");
             entity.Property(e => e.Title).HasColumnName("title");
 
             entity.HasOne(d => d.Rating).WithMany(p => p.Movies)
-                .HasForeignKey(d => d.Ratingid)
+                .HasForeignKey(d => d.RatingId)
                 .OnDelete(DeleteBehavior.Restrict)
                 .HasConstraintName("movies_ratingid_fkey");
 
@@ -80,10 +80,10 @@ public partial class MovieApiContext : DbContext
             entity.ToTable("ratings");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Ratingtype)
+            entity.Property(e => e.RatingType)
                 .HasMaxLength(30)
                 .HasColumnName("ratingtype");
-            entity.Property(e => e.Shortratingtype)
+            entity.Property(e => e.ShortRatingType)
                 .HasMaxLength(5)
                 .HasColumnName("shortratingtype");
         });

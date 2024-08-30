@@ -6,7 +6,7 @@ public partial class Genre
 {
     public int Id { get; set; }
 
-    public string? Genretype { get; set; }
+    public string? GenreType { get; set; }
 
     [JsonIgnore]
     public virtual ICollection<Movie> Movies { get; set; } = new List<Movie>();
