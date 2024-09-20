@@ -1,14 +1,12 @@
-﻿using MovieAPI.Models;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using MovieAPI.Models;
 
 namespace MovieAPI.DAL;
 
-public partial class MovieApiContext : DbContext
+public partial class MovieApiContext : IdentityDbContext<IdentityUser>
 {
-    public MovieApiContext()
-    {
-    }
-
     public MovieApiContext(DbContextOptions<MovieApiContext> options)
         : base(options)
     {
@@ -25,6 +23,7 @@ public partial class MovieApiContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<Genre>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("genres_pkey");

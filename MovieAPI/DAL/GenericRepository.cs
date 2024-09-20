@@ -15,8 +15,8 @@ public class GenericRepository<TEntity> where TEntity : class
     }
 
     public virtual async Task<ICollection<TEntity>> Get(
-        Expression<Func<TEntity,bool>>? filter = null,
-        Func<IQueryable<TEntity>,IOrderedQueryable<TEntity>>? orderBy = null,
+        Expression<Func<TEntity, bool>>? filter = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         string includeProperties = "")
     {
         IQueryable<TEntity> query = _dbSet;                                                                  // Creates the base for the query. Uses the model that instantiated the GenericRepository
@@ -79,7 +79,7 @@ public class GenericRepository<TEntity> where TEntity : class
         _context.Entry(entity).State = EntityState.Modified;
     }
 
-    public virtual bool Exists(Expression<Func<TEntity,bool>> predicate)
+    public virtual bool Exists(Expression<Func<TEntity, bool>> predicate)
     {
         bool entityExists = _dbSet.Any(predicate);
         return entityExists;

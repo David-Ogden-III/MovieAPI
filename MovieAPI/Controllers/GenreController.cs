@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using MovieAPI.Models;
-using MovieAPI.DAL;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MovieAPI.DAL;
+using MovieAPI.Models;
 
 namespace MovieAPI.Controllers;
 
 [Route("[controller]")]
 [ApiController]
+[Authorize]
 public class GenreController : ControllerBase
 {
     private readonly MovieApiContext _context;
