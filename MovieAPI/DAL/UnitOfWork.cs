@@ -1,4 +1,5 @@
-﻿using MovieAPI.Models;
+﻿using Microsoft.AspNetCore.Identity;
+using MovieAPI.Models;
 
 namespace MovieAPI.DAL;
 
@@ -8,6 +9,7 @@ public class UnitOfWork : IDisposable
     private GenericRepository<Rating>? _ratingRepository;
     private GenericRepository<Genre>? _genreRepository;
     private GenericRepository<Movie>? _movieRepository;
+    private GenericRepository<IdentityRole>? _roleRepository;
 
     public UnitOfWork(MovieApiContext context)
     {
@@ -47,6 +49,18 @@ public class UnitOfWork : IDisposable
                 _movieRepository = new(_context);
             }
             return _movieRepository;
+        }
+    }
+
+    public GenericRepository<IdentityRole> RoleRepository
+    {
+        get
+        {
+            if (_roleRepository == null)
+            {
+                _roleRepository = new(_context);
+            }
+            return _roleRepository;
         }
     }
 
