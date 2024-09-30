@@ -8,11 +8,14 @@ namespace MovieAPI.Controllers;
 
 [Route("[controller]")]
 [ApiController]
-[Authorize]
 public class GenreController : ControllerBase
 {
     private readonly MovieApiContext _context;
     private readonly UnitOfWork unitOfWork;
+    private readonly Dictionary<string, string> TableNames = new()
+    {
+        {"User", nameof(Genre.User)},
+    };
 
     public GenreController(MovieApiContext context)
     {
@@ -23,7 +26,8 @@ public class GenreController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<Genre>> Get()
     {
-        var genres = await unitOfWork.GenreRepository.Get();
+        string tablesToInclude = $"{TableNames["User"]}";
+        var genres = await unitOfWork.GenreRepository.Get(includeProperties: tablesToInclude);
 
         return Ok(genres);
     }

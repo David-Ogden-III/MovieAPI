@@ -5,7 +5,7 @@ using MovieAPI.Models;
 
 namespace MovieAPI.DAL;
 
-public partial class MovieApiContext : IdentityDbContext<IdentityUser>
+public partial class MovieApiContext : IdentityDbContext<User>
 {
     public MovieApiContext(DbContextOptions<MovieApiContext> options)
         : base(options)
@@ -24,6 +24,12 @@ public partial class MovieApiContext : IdentityDbContext<IdentityUser>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasMany(u => u.Genres).WithOne(u => u.User).HasForeignKey(g => g.UserId);
+        });
+
         modelBuilder.Entity<Genre>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("genres_pkey");
